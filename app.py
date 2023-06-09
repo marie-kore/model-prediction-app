@@ -45,7 +45,7 @@ def main():
     menu = ["analyse","sarimax","autoArima","ridge","ann","lstm"]
     choice = st.sidebar.selectbox("Menu", menu)
     if choice == "analyse" :
-        col1,col2 = st.columns([3,3])
+        col1,col2 = st.columns([8,4])
         col3,col4 = st.columns([3,3])
         col5,col6 = st.columns([3,2])
         
