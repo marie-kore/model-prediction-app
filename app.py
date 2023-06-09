@@ -6,6 +6,7 @@ import seaborn as sns
 from function_viz import Viz as viz
 from function_preprocess import Preprocess as pr
 from function_model import models as md
+from altair.vegalite.v3.api import Chart
 import os
 import streamlit as st
 import streamlit.components.v1 as components
