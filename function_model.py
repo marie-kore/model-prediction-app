@@ -105,8 +105,8 @@ class models():
             data_frame = predcp,
             x      = 'index',
             y      = 'Preal',
-            width  = 600,
-            height = 400
+            width  = 500,
+            height = 500
         )
 
         fig.update_xaxes(
@@ -153,8 +153,8 @@ class models():
             xaxis_title='Date',
             yaxis_title='MGW',
            
-            width=600,
-            height=400,
+            width=500,
+            height=500,
             legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1)
         )
 

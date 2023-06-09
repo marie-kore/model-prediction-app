@@ -45,7 +45,7 @@ def main():
     menu = ["analyse","sarimax","autoArima","ridge","ann","lstm"]
     choice = st.sidebar.selectbox("Menu", menu)
     if choice == "analyse" :
-        col1,col2 = st.columns([8,4])
+        col1,col2 = st.columns([3,3])
         col3,col4 = st.columns([3,3])
         col5,col6 = st.columns([3,2])
         
@@ -151,8 +151,8 @@ def main():
       
     elif choice == "ann" :
         st.subheader("ann")
-        col1,col2 = st.columns([4,1])
-        col3,col4 = st.columns([4,1])
+        col1,col2 = st.columns([9,3])
+        col3,col4 = st.columns([9,3])
         
         with col1:
             st.info("prediction avec le test_set")
