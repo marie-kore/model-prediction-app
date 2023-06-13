@@ -24,6 +24,7 @@ df = df.asfreq('H')
 df = df.sort_index()
 
 pred_ann1 = pd.read_csv("dt_ann1_step1.csv")
+pred_simul_ann1 = pd.read_csv("pred_simul_ann1.csv")
 
 
 # decomposition
@@ -91,7 +92,7 @@ def main():
             st.pyplot(fig)
             
         with col6: 
-            seuil = st.slider('', 0.0, 1.0, 0.8, step=0.05)
+            seuil = st.slider('', 0.0, 1.0, 0.8, step=0.1)
             lags = lag_importance(df,seuil)
             st.write("Lags importants ", lags)
             
@@ -153,6 +154,8 @@ def main():
         st.subheader("ann")
         col1,col2 = st.columns([9,3])
         col3,col4 = st.columns([9,3])
+        col5,col6 = st.columns([3,3])
+        
         
         with col1:
             st.info("prediction avec le test_set")
@@ -162,15 +165,34 @@ def main():
         with col2:
             st.info("erreur")
             md.compare_pred(pred_ann1)
+            md.mean_absolute_errors(pred_ann1)
             md.mean_squared_errors(pred_ann1)
+            md.r_mean_squared_errors(pred_ann1)
             md.mean_absolute_percentage_error(pred_ann1.Preal,pred_ann1.pred)
             
         with col3:
             st.info("prediction 1ere sem 2021")
-            
+            md.graph_compare(pred_simul_ann1)
+          
         with col4:
             st.info("erreur 2")
-        
+            md.mean_absolute_errors(pred_simul_ann1)
+            md.mean_squared_errors(pred_simul_ann1)
+            md.r_mean_squared_errors(pred_simul_ann1)
+            md.mean_absolute_percentage_error(pred_simul_ann1.Preal,pred_simul_ann1.pred)
+            
+        with col5:
+             st.info("remarques et conclusion")
+             st.write("le model ANN avec 2 couches cachees  fait des predictions avec un pas de 1 en utilisant les 24h precedentes.Pour le test sur les donnees de 2021 nous utilisons que les predictions et non les valeurs reelles.On obtient des resultats moyens.")
+
+        with col6:
+            st.info("parametres")
+            st.write("batch_size : 50 ")
+            st.write("epochs : 50")
+            st.write("nbre neurons 1ere couche : 100")
+            st.write("nbre neurons 2eme couche : 150")
+
+
     else:
         st.subheader("lstm")
         col1,col2 = st.columns([4,1])
