@@ -4,6 +4,8 @@ import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
+
 class models():
     @staticmethod
     def split_data(df,end_train,feature):
@@ -18,7 +20,7 @@ class models():
         return X_train,y_train,X_test,y_test
 
         
-    def mean_squared_errors(dfpred):
+    def r_mean_squared_errors(dfpred):
         error =   np.sqrt(mean_squared_error(y_true=dfpred['Preal'],y_pred=dfpred['pred']))
         st.write("rmse",error)
 
@@ -27,11 +29,21 @@ class models():
         y_true, y_pred = np.array(y_true), np.array(y_pred)
         mapes =np.mean(np.abs((y_true - y_pred) / y_true)) * 100
         st.write("mape",mapes)
+    
+    def mean_squared_errors(dfpred):
+        error =   mean_squared_error(y_true=dfpred['Preal'],y_pred=dfpred['pred'])
+        st.write("mse",error)
+
+    def mean_absolute_errors(dfpred):
+        error =   mean_absolute_error(y_true=dfpred['Preal'],y_pred=dfpred['pred'])
+        st.write("mae",error)
 
 
     def df_prediction(df, prediction):
         import pandas as pd
         prediction = pd.DataFrame(prediction)
+        prediction['Preal'] = pd.to_numeric(prediction['Preal'])
+        prediction['pred'] = pd.to_numeric(prediction['pred'])
         prediction['Preal'] = df.loc[prediction.index, 'Preal']
         prediction['Prev'] = df.loc[prediction.index, 'Prev']
         return prediction
@@ -171,8 +183,8 @@ class models():
             x      = 'index',
             y      = 'Preal',
             title  = 'MGW',
-            width  = 1200,
-            height = 700
+            width  = 500,
+            height = 500
         )
 
         fig.update_xaxes(
@@ -207,27 +219,31 @@ class models():
             title='MGW prevu VS realise',
             xaxis_title='Date',
             yaxis_title='MGW',
-            height=700,
-            width=1200,
+            width=500,
+            height=500,
             legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1)
         )
 
 
-        fig.show()
+        st.plotly_chart(fig)
 
     def compare_pred(df):
         df_cp = df.copy()
         df_cp['diff_pred'] = abs(df_cp['pred'] - df_cp['Preal'])
         df_cp['diff_prev'] = abs(df_cp['Prev'] - df_cp['Preal'])
 
-        
         count_pred_closer = sum(df_cp['diff_pred'] < df_cp['diff_prev'])
         count_prev_closer = sum(df_cp['diff_prev'] < df_cp['diff_pred'])
 
+        index_pred_closer = df_cp[df_cp['diff_pred'] < df_cp['diff_prev']].index
+        index_prev_closer = df_cp[df_cp['diff_prev'] < df_cp['diff_pred']].index
+        count_pred_sup = sum(df_cp.loc[index_pred_closer, 'pred'] > df_cp.loc[index_pred_closer, 'Preal'])
+        count_prev_sup = sum(df_cp.loc[index_prev_closer, 'pred'] > df_cp.loc[index_prev_closer, 'Preal'])
+        st.write("'pred' plus proche de 'Preal' :", count_pred_closer)
+        st.write("'prev' plus proche de 'Preal':", count_prev_closer)
+        st.write("'pred' superieure a 'Preal' :", count_pred_sup)
+        st.write("'prev' superieure a 'Preal' :", count_prev_sup)
 
-        st.write(" 'pred'  plus proche:", count_pred_closer)
-        st.write("'prev' plus proche:", count_prev_closer)
-        
         
     def generer_pred_testFinal_ann(data,tab1,tab2,date_end_train):
     
