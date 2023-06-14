@@ -75,7 +75,7 @@ def main():
             st.info("autocorrelation pacf")
             st.pyplot(plot_pacf(df.Preal,lags=80))
             
-            lags=72
+          
         with col4:
             st.info("distribution par semaine")
             fig, ax = plt.subplots(figsize=(10, 7))
