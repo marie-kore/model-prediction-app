@@ -73,7 +73,7 @@ def main():
             
         with col3:
             st.info("autocorrelation pacf")
-            st.pyplot(plot_pacf(df.Preal,lags=80))
+            st.pyplot(plot_pacf(df.Preal))
             
           
         with col4:
