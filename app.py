@@ -17,6 +17,8 @@ from statsmodels.graphics.tsaplots import plot_pacf
 import pandas as pd 
 import numpy as np
 
+
+
 df = pd.read_csv("prog_conso_2010_2020.csv")
 df['Date'] = pd.to_datetime(df['Date'], format='%Y/%m/%d %H:%M')
 df = df.set_index('Date')
@@ -71,7 +73,9 @@ def main():
             
         with col3:
             st.info("autocorrelation pacf")
-            st.pyplot(plot_pacf(df.Preal))
+            st.pyplot(plot_pacf(df.Preal,lags=80))
+            
+            lags=72
         with col4:
             st.info("distribution par semaine")
             fig, ax = plt.subplots(figsize=(10, 7))
