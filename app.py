@@ -27,7 +27,7 @@ pred_ann1 = pd.read_csv("dt_ann1_step1.csv")
 pred_simul_ann1 = pd.read_csv("pred_simul_ann1.csv")
 
 pred_lgbm =  pd.read_csv("dt_pred_lgbm1.csv")
-
+pred_cat = pd.read_csv("dt_pred_catboost.csv")
 pred_xgb =  pd.read_csv("dt_pred_xgb1.csv")
 # decomposition
 
@@ -45,7 +45,7 @@ def lag_importance(df ,seuil):
 
 
 def main():
-    menu = ["analyse","sarimax","xgboost","ridge","ann","lstm"]
+    menu = ["analyse","sarimax","xgboost","catboost","ann","lstm"]
     choice = st.sidebar.selectbox("Menu", menu)
     if choice == "analyse" :
         col1,col2 = st.columns([3,3])
@@ -148,20 +148,26 @@ def main():
             st.write("variables : ['year' ,'day','month','day_of_week', 'hour_sin', 'hour_cos'] " )
                 
             
-    elif choice == "ridge" :
+    elif choice == "catboost" :
         st.subheader("ridge")
         col1,col2 = st.columns([4,1])
         col3,col4 = st.columns([4,1])
         
         with col1:
             st.info("prediction avec le test_set")
-                    
+            md.graph_compare_interval(pred_cat)      
         with col2:
             st.info("erreur")
-            
+            md.mean_absolute_errors(pred_cat)
+            md.r_mean_squared_errors(pred_cat)
+            md.mean_absolute_percentage_error(pred_cat.Preal,pred_cat.pred)
+            md.compare_pred(pred_cat)
+            md.coverage(pred_cat)
+        
         with col3:
-            st.info("prediction 1ere sem 2021")
-            
+           
+            st.info("donnees")
+            st.write(pred_cat)
         with col4:
             st.info("erreur 2")
       
