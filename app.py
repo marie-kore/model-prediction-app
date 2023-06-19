@@ -17,8 +17,6 @@ from statsmodels.graphics.tsaplots import plot_pacf
 import pandas as pd 
 import numpy as np
 
-
-
 df = pd.read_csv("prog_conso_2010_2020.csv")
 df['Date'] = pd.to_datetime(df['Date'], format='%Y/%m/%d %H:%M')
 df = df.set_index('Date')
@@ -28,7 +26,9 @@ df = df.sort_index()
 pred_ann1 = pd.read_csv("dt_ann1_step1.csv")
 pred_simul_ann1 = pd.read_csv("pred_simul_ann1.csv")
 
+pred_lgbm =  pd.read_csv("dt_pred_lgbm1.csv")
 
+pred_xgb =  pd.read_csv("dt_pred_xgb1.csv")
 # decomposition
 
 dd= df.resample('m').sum()
@@ -45,7 +45,7 @@ def lag_importance(df ,seuil):
 
 
 def main():
-    menu = ["analyse","sarimax","autoArima","ridge","ann","lstm"]
+    menu = ["analyse","sarimax","xgboost","ridge","ann","lstm"]
     choice = st.sidebar.selectbox("Menu", menu)
     if choice == "analyse" :
         col1,col2 = st.columns([3,3])
@@ -74,8 +74,6 @@ def main():
         with col3:
             st.info("autocorrelation pacf")
             st.pyplot(plot_pacf(df.Preal))
-            
-          
         with col4:
             st.info("distribution par semaine")
             fig, ax = plt.subplots(figsize=(10, 7))
@@ -120,23 +118,35 @@ def main():
         with col4:
             st.info("erreur 2")
         
-    elif choice == "autoArima" :
-        st.subheader("autoArima")
+    elif choice == "xgboost" :
+        st.subheader("xgboost")
         col1,col2 = st.columns([4,1])
         col3,col4 = st.columns([4,1])
         
         with col1:
             st.info("prediction avec le test_set")
+            md.graph_compare_interval(pred_xgb)
                     
         with col2:
             st.info("erreur")
+            md.mean_absolute_errors(pred_xgb)
+            md.r_mean_squared_errors(pred_xgb)
+            md.mean_absolute_percentage_error(pred_xgb.Preal,pred_xgb.pred)
+            md.coverage(pred_xgb)
+        
             
         with col3:
-            st.info("prediction 1ere sem 2021")
+            st.info("donnees")
+            st.write(pred_xgb)
             
         with col4:
-            st.info("erreur 2")
-    
+            st.info("parametres")
+            
+            st.write(" learning_rate = 0.1, max_depth = 5, n_estimators = 300")
+            st.write("lags =[ 48,  72,  96, 120, 143, 144, 145, 166, 167, 168]")
+            st.write("variables : ['year' ,'day','month','day_of_week', 'hour_sin', 'hour_cos'] " )
+                
+            
     elif choice == "ridge" :
         st.subheader("ridge")
         col1,col2 = st.columns([4,1])
@@ -186,8 +196,8 @@ def main():
             md.mean_absolute_percentage_error(pred_simul_ann1.Preal,pred_simul_ann1.pred)
             
         with col5:
-             st.info("remarques et conclusion")
-             st.write("le model ANN avec 2 couches cachees  fait des predictions avec un pas de 1 en utilisant les 24h precedentes.Pour le test sur les donnees de 2021 nous utilisons que les predictions et non les valeurs reelles.On obtient des resultats moyens.")
+            st.info("remarques et conclusion")
+            st.write("le model ANN avec 2 couches cachees  fait des predictions avec un pas de 1 en utilisant les 24h precedentes.Pour le test sur les donnees de 2021 nous utilisons que les predictions et non les valeurs reelles.On obtient des resultats moyens.")
 
         with col6:
             st.info("parametres")
@@ -201,20 +211,32 @@ def main():
         st.subheader("lstm")
         col1,col2 = st.columns([4,1])
         col3,col4 = st.columns([4,1])
+       
         
         with col1:
             st.info("prediction avec le test_set")
-                    
+            md.graph_compare_interval(pred_lgbm)  
         with col2:
             st.info("erreur")
-            
+            md.mean_absolute_errors(pred_lgbm)
+            md.r_mean_squared_errors(pred_lgbm)
+            md.mean_absolute_percentage_error(pred_lgbm.Preal,pred_lgbm.pred)
+            md.coverage(pred_lgbm)
+        
         with col3:
-            st.info("prediction 1ere sem 2021")
+           
+            st.info("donnees")
+            st.write(pred_lgbm)
+            
             
         with col4:
-            st.info("erreur 2")
-        
- 
+            st.info("parametres")
+            
+            st.write(" learning_rate = 0.1, max_depth = 7, n_estimators = 300")
+            st.write("lags =[ 48,  72,  96, 120, 143, 144, 145, 166, 167, 168]")
+            st.write("variables : ['year' ,'day','month','day_of_week', 'hour_sin', 'hour_cos'] " )
+                
+       
 if __name__ == '__main__':
     main()
     
