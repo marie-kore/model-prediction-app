@@ -118,7 +118,7 @@ class models():
             x      = 'index',
             y      = 'Preal',
             width  = 500,
-            height = 500
+            height = 700
         )
 
         fig.update_xaxes(
@@ -166,7 +166,7 @@ class models():
             yaxis_title='MGW',
            
             width=500,
-            height=500,
+            height=700,
             legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1)
         )
 
@@ -240,7 +240,7 @@ class models():
             y      = 'Preal',
             title  = 'MGW',
             width  = 500,
-            height = 500
+            height = 700
         )
 
         fig.update_xaxes(
@@ -287,7 +287,7 @@ class models():
             xaxis_title='Date',
             yaxis_title='MGW',
             width=500,
-            height=500,
+            height=700,
             legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1)
         )
 
