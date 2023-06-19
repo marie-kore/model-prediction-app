@@ -132,6 +132,7 @@ def main():
             md.mean_absolute_errors(pred_xgb)
             md.r_mean_squared_errors(pred_xgb)
             md.mean_absolute_percentage_error(pred_xgb.Preal,pred_xgb.pred)
+            md.compare_pred(pred_xgb)
             md.coverage(pred_xgb)
         
             
@@ -221,6 +222,7 @@ def main():
             md.mean_absolute_errors(pred_lgbm)
             md.r_mean_squared_errors(pred_lgbm)
             md.mean_absolute_percentage_error(pred_lgbm.Preal,pred_lgbm.pred)
+            md.compare_pred(pred_lgbm)
             md.coverage(pred_lgbm)
         
         with col3:
