@@ -227,6 +227,76 @@ class models():
 
         st.plotly_chart(fig)
 
+
+    
+    def graph_compare_interval(predcp):
+        import plotly.express as px
+        import plotly.graph_objects as go
+        predcp = predcp.reset_index()
+                
+        fig = px.line(
+            data_frame = predcp,
+            x      = 'index',
+            y      = 'Preal',
+            title  = 'MGW',
+            width  = 500,
+            height = 500
+        )
+
+        fig.update_xaxes(
+            rangeslider_visible=True,
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1, label="1day", step="day", stepmode="todate"),
+                    dict(count=1, label="1m", step="month", stepmode="todate"),
+                    dict(count=3, label="3m", step="month", stepmode="todate"),
+                    dict(count=6, label="6m", step="month", stepmode="todate"),
+                    dict(count=1, label="YTD", step="year", stepmode="todate"),
+                
+
+                    dict(step="all")
+                ])
+            )
+        )
+
+
+        fig.add_trace(
+            go.Scatter(
+                x=predcp['index'], 
+                y=predcp['lower_bound'], 
+                mode='lines',
+                name='lower_bound',
+                marker=dict(color='#FF007F')
+            )
+        )
+
+        
+        fig.add_trace(
+            go.Scatter(
+                x=predcp['index'], 
+                y=predcp['upper_bound'], 
+                mode='lines',
+                name='upper_bound',
+                marker=dict(color='#AA0000')
+            )
+        )
+
+
+        fig.update_layout(
+            title='MGW prevu VS realise',
+            xaxis_title='Date',
+            yaxis_title='MGW',
+            width=500,
+            height=500,
+            legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1)
+        )
+
+
+        st.plotly_chart(fig)
+
+
+
+
     def compare_pred(df):
         df_cp = df.copy()
         df_cp['diff_pred'] = abs(df_cp['pred'] - df_cp['Preal'])
@@ -267,13 +337,20 @@ class models():
         import numpy as np
         from statsmodels.graphics.tsaplots import acf
         
-        acf_val = acf(df['Preal'])
+        acf_val = acf(df['Preal'],nlags=168)
         ind_lag = np.where(acf_val > seuil)[0]
         
         return(ind_lag)
 
     
-    
-    
+    def coverage(predictions):
+        inside_interval = np.where(
+    (predictions['Preal'] >= predictions['lower_bound']) & 
+    (predictions['Preal'] <= predictions['upper_bound']),
+    True,False)
+        cover = inside_interval.mean()
+        cv = 100 * cover
+        st.write(f"Couverture de l'intervalle de prediction sur les donnees de test  ",cv)
+
 
                 
