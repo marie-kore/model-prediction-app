@@ -45,7 +45,7 @@ def lag_importance(df ,seuil):
 
 
 def main():
-    menu = ["analyse","sarimax","xgboost","catboost","ann","lstm"]
+    menu = ["analyse","sarimax","xgboost","catboost","ann","lgbm"]
     choice = st.sidebar.selectbox("Menu", menu)
     if choice == "analyse" :
         col1,col2 = st.columns([3,3])
@@ -215,7 +215,7 @@ def main():
 
 
     else:
-        st.subheader("lstm")
+        st.subheader("lgbm")
         col1,col2 = st.columns([4,1])
         col3,col4 = st.columns([4,1])
        
