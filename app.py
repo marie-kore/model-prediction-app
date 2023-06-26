@@ -164,8 +164,10 @@ def main():
         with col4:
             st.info("parametres")
             
-            st.write(" max_iter=1000,alpha = 1.0235896477251554e-1")
-            st.write()
+            st.write("learning_rate=0.1,max_depth=5,n_estimators =300")
+            st.write("lags =[    48,  49,  71,
+        72,  73,  95,  96,  97, 119, 120, 121, 142, 143, 144, 145, 146,
+       165, 166, 167, 168]")
             st.write("variables : ['year' ,'day','month','day_of_week', 'hour_sin', 'hour_cos'] " )
                 
             
