@@ -25,7 +25,7 @@ df = df.sort_index()
 
 pred_ann1 = pd.read_csv("dt_ann1_step1.csv")
 pred_simul_ann1 = pd.read_csv("pred_simul_ann1.csv")
-
+pred_lasso = pd.read_csv("pred_lasso.csv")
 pred_lgbm =  pd.read_csv("dt_pred_lgbm1.csv")
 pred_cat = pd.read_csv("dt_pred_catboost.csv")
 pred_xgb =  pd.read_csv("dt_pred_xgb1.csv")
@@ -45,7 +45,7 @@ def lag_importance(df ,seuil):
 
 
 def main():
-    menu = ["analyse","sarimax","xgboost","catboost","ann","lgbm"]
+    menu = ["analyse","lasso","xgboost","catboost","ann","lgbm"]
     choice = st.sidebar.selectbox("Menu", menu)
     if choice == "analyse" :
         col1,col2 = st.columns([3,3])
@@ -101,23 +101,37 @@ def main():
        
 
        
-    elif choice == "sarimax" :
-        st.subheader("sarimax")
+    elif choice == "lasso" :
+        st.subheader("lasso")
         col1,col2 = st.columns([5,1])
         col3,col4 = st.columns([5,1])
         
-        with col1:
+         with col1:
             st.info("prediction avec le test_set")
-                    
+            md.graph_compare_interval(pred_lasso)  
         with col2:
             st.info("erreur")
-            
+            md.mean_absolute_errors(pred_lasso)
+            md.r_mean_squared_errors(pred_lasso)
+            md.mean_absolute_percentage_error(pred_lasso.Preal,pred_lasso.pred)
+            md.compare_pred(pred_lasso)
+            md.coverage(pred_lasso)
+        
         with col3:
-            st.info("prediction 1ere sem 2021")
+           
+            st.info("donnees")
+            st.write(pred_lasso)
+            
             
         with col4:
-            st.info("erreur 2")
-        
+            st.info("parametres")
+            
+            st.write(" learning_rate = 0.1, max_depth = 7, n_estimators = 300")
+            st.write("lags =[ 48,  72,  96, 120, 143, 144, 145, 166, 167, 168]")
+            st.write("variables : ['year' ,'day','month','day_of_week', 'hour_sin', 'hour_cos'] " )
+                
+
+    
     elif choice == "xgboost" :
         st.subheader("xgboost")
         col1,col2 = st.columns([4,1])
@@ -143,13 +157,20 @@ def main():
         with col4:
             st.info("parametres")
             
-            st.write(" learning_rate = 0.1, max_depth = 5, n_estimators = 300")
-            st.write("lags =[ 48,  72,  96, 120, 143, 144, 145, 166, 167, 168]")
+            st.write(" max_iter=1000,alpha = 1.0235896477251554e-1")
+            st.write("lags =[ 48,  49,  50,  51,  52,  53,  54,  55,
+        56,  57,  63,  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,
+        74,  75,  76,  77,  78,  79,  80,  81,  87,  88,  89,  90,  91,
+        92,  93,  94,  95,  96,  97,  98,  99, 100, 101, 102, 103, 104,
+       105, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
+       123, 124, 125, 126, 127, 128, 129, 135, 136, 137, 138, 139, 140,
+       141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153,
+       154, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168],0.6 corr")
             st.write("variables : ['year' ,'day','month','day_of_week', 'hour_sin', 'hour_cos'] " )
                 
             
     elif choice == "catboost" :
-        st.subheader("ridge")
+        st.subheader("catboost")
         col1,col2 = st.columns([4,1])
         col3,col4 = st.columns([4,1])
         
