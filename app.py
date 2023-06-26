@@ -106,7 +106,7 @@ def main():
         col1,col2 = st.columns([5,1])
         col3,col4 = st.columns([5,1])
         
-         with col1:
+        with col1:
             st.info("prediction avec le test_set")
             md.graph_compare_interval(pred_lasso)  
         with col2:
