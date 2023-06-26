@@ -25,7 +25,7 @@ df = df.sort_index()
 
 pred_ann1 = pd.read_csv("dt_ann1_step1.csv")
 pred_simul_ann1 = pd.read_csv("pred_simul_ann1.csv")
-pred_lasso = pd.read_csv("pred_lasso.csv")
+pred_lasso = pd.read_csv("pred_lasso1.csv")
 pred_lgbm =  pd.read_csv("dt_pred_lgbm1.csv")
 pred_cat = pd.read_csv("dt_pred_catboost.csv")
 pred_xgb =  pd.read_csv("dt_pred_xgb1.csv")
