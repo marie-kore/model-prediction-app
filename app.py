@@ -29,10 +29,11 @@ pred_lasso = pd.read_csv("pred_lasso1.csv")
 pred_lgbm =  pd.read_csv("dt_pred_lgbm1.csv")
 pred_cat = pd.read_csv("dt_pred_catboost.csv")
 pred_xgb =  pd.read_csv("dt_pred_xgb1.csv")
+pred_elas = pd.read_csv("pred_elas1.csv")
 # decomposition
 
 dd= df.resample('m').sum()
-result = seasonal_decompose(df.loc["2019-06-01 00:00:00": ,'Preal'])
+result = seasonal_decompose(dd.Preal)
 ### nbre de lags importants
 def lag_importance(df ,seuil):
     
@@ -45,7 +46,7 @@ def lag_importance(df ,seuil):
 
 
 def main():
-    menu = ["analyse","lasso","xgboost","catboost","ann","lgbm"]
+    menu = ["analyse","lasso","elastic","xgboost","catboost","ann","lgbm"]
     choice = st.sidebar.selectbox("Menu", menu)
     if choice == "analyse" :
         col1,col2 = st.columns([3,3])
@@ -130,6 +131,38 @@ def main():
             
             st.write("variables : ['year' ,'day','month','day_of_week', 'hour_sin', 'hour_cos'] " )
                 
+    elif choice == "elastic" :
+        st.subheader("elastic")
+        col1,col2 = st.columns([5,1])
+        col3,col4 = st.columns([5,1])
+        
+        with col1:
+            st.info("prediction avec le test_set")
+            md.graph_compare_interval(pred_elas)  
+        with col2:
+            st.info("erreur")
+            md.mean_absolute_errors(pred_elas)
+            md.r_mean_squared_errors(pred_elas)
+            md.mean_absolute_percentage_error(pred_elas.Preal,pred_elas.pred)
+            md.compare_pred(pred_elas)
+            md.coverage(pred_elas)
+        
+        with col3:
+           
+            st.info("donnees")
+            st.write(pred_elas)
+            
+            
+        with col4:
+            st.info("parametres")
+            st.write("lags =[  48,  49,  50,  70,  71,  72,  73,  74,  94,  95,  96,  97,98, 118, 119, 120, 121, 122, 141, 142, 143, 144, 145, 146, 147,165, 166, 167, 168]")
+            st.write(" max_iter=1000,alpha=0.2592943797404667, l1_ratio=1.0")
+            
+            st.write("variables : ['year' ,'day','month','day_of_week', 'hour_sin', 'hour_cos'] " )
+                
+
+
+
 
     
     elif choice == "xgboost" :
