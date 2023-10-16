@@ -208,7 +208,7 @@ def main():
             md.mean_absolute_errors(pred_cat)
             md.r_mean_squared_errors(pred_cat)
             md.mean_absolute_percentage_error(pred_cat.Preal,pred_cat.pred)
-            md.compare_pred(pred_cat)
+            md.graph_compare(pred_cat)
             md.coverage(pred_cat)
         
         with col3:
