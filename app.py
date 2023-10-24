@@ -269,7 +269,7 @@ def main():
         
         with col1:
             st.info("prediction avec le test_set")
-            md.graph_compare_interval(pred_lgbm)  
+            md.graph_compare(pred_lgbm)  
         with col2:
             st.info("erreur")
             md.mean_absolute_errors(pred_lgbm)
