@@ -96,7 +96,7 @@ def main():
             st.pyplot(fig)
             
         with col6: 
-            seuil = st.slider('', 0.0, 1.0, 0.8, step=0.05)
+            seuil = st.slider('', 0.0, 1.0, 0.8, step=0.01)
             lags = lag_importance(df,seuil)
             st.write("Lags importants ", lags)
             
