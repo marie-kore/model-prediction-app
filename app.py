@@ -32,7 +32,8 @@ pred_xgb =  pd.read_csv("dt_pred_xgb1.csv")
 pred_elas = pd.read_csv("pred_elas1.csv")
 # decomposition
 
-dd= df.resample('m').sum()
+dd= df.resample('D').sum()
+dd  = dd.iloc[1:400]
 result = seasonal_decompose(dd.Preal)
 ### nbre de lags importants
 def lag_importance(df ,seuil):
