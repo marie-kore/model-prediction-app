@@ -40,7 +40,7 @@ def lag_importance(df ,seuil):
     
     import numpy as np
    
-    acf_val = acf(df['Preal'])
+    acf_val = acf(df['Preal'],nlags=400)
 
     ind_lag = np.where(acf_val > seuil)[0]
     return(ind_lag)
